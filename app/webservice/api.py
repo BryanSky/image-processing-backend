@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, url_for, request
+from flask import Blueprint, jsonify, url_for, request, send_file
 from threading import Thread
 import os
 import cv2 as cv
@@ -26,25 +26,26 @@ def upload_image():
         if request.files:
             image = request.files["image"]
             generated_id = uuid.uuid1()
-            image.save("/app/data/" + str(generated_id) + ".png")
+            print("OK -1")
+            print(image)
+            image.save("app/data/" + str(generated_id) + ".png")
+            print("OK")
             thread = Thread(target=evaluate_image, args=(generated_id, ))
+            print("OK 1/2")
             thread.start()
+            print("OK 1")
             return jsonify(str(generated_id))
 
 
 @blueprint.route('/preview/<image_id>', methods=['GET'])
 def get_image(image_id):
-    image = '/app/data' + str(image_id)
-    if os.path.isfile(image):
-        img = cv.imread(image)
-        return jsonify(img)
-    else:
-        sys.stdout('Status: 404 Not Found\r\n\r\n')
+    image = 'data/' + str(image_id)
+    return send_file(image, mimetype='image/png')
 
 
 @blueprint.route('/data/<image_id>', methods=['GET'])
 def get_graph(image_id):
-    graph_file = '/app/data' + str(image_id)
+    graph_file = 'app/data' + str(image_id)
     if not os.path.isfile(graph_file):
         sys.stdout('Status: 404 Not Found\r\n\r\n')
     with open(graph_file) as json_file:
