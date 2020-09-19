@@ -15,7 +15,7 @@ RUN curl https://bootstrap.pypa.io/get-pip.py | python3 \
 
 # Install node modules
 COPY package.json package.json
-RUN npm set progress=false && npm install -s --no-progress -v && npm install chalk
+RUN npm set progress=false && npm install -s --no-progress -v
 COPY . .
 RUN sh build.sh
 
