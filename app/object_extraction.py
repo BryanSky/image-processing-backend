@@ -8,3 +8,5 @@ def extract_object_with_position(img):
     """
     # TODO: implement
     return
+
+

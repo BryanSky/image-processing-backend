@@ -1,0 +1,8 @@
+doc
+docker
+.venv
+.git
+.idea
+__pycache__
+.gitignore
+
