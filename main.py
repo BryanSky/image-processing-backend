@@ -1,7 +1,7 @@
 import cv2
-from .object_extraction import extract_object_with_position
-from .line_extraction import extract_lines
-from .graph_builder import build_graph, visualize_graph
+from app.object_extraction import extract_object_with_position
+from app.line_extraction import extract_lines
+from app.graph_builder import build_graph, visualize_graph
 
 
 def process_image(image_path='./../res/example_img.png'):
