@@ -1,0 +1,9 @@
+doc
+docker
+.venv
+.git
+.idea
+__pycache__
+.gitignore
+node_modules
+node_modules_old

@@ -1,3 +1,8 @@
+import os
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
 
 def extract_object_with_position(img):
     """
@@ -8,3 +13,55 @@ def extract_object_with_position(img):
     """
     # TODO: implement
     return
+
+
+def load_templates():
+    files = os.listdir('./../test/symbols_png')
+    point_representation_dict = {}
+    for file in files:
+        point_rep = load_point_representation(os.path.join('./../test/symbols_png', file))
+        point_representation_dict[file] = point_rep
+
+
+def load_point_representation(file):
+    print(file)
+    img = cv2.imread(file)
+    lines = extract_lines_by_color(img)
+    points = []
+    if lines is None or len(lines) == 0:
+        return points
+    for line in lines:
+        for x1, y1, x2, y2 in line:
+            points.append([x1, y1])
+            points.append([x2, y2])
+    return points
+
+
+def extract_lines_by_color(img):
+    red_img = img.copy()
+    red_img[:, :, 0] = 0
+    red_img[:, :, 1] = 0
+    # cv2.imshow(red_img)
+    indices = np.argwhere((red_img != 0).all())
+    print(indices)
+    lines = apply_hough_trafo(red_img)
+    return lines
+
+
+def apply_hough_trafo(img):
+    kernel_size = 5
+    gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    blur_gray = cv2.GaussianBlur(gray_img, (kernel_size, kernel_size), 0)
+    edges = cv2.Canny(blur_gray, 50, 150)
+
+    line_image = np.copy(img) * 0
+    lines = cv2.HoughLinesP(edges, rho=1, theta=np.pi / 180, threshold=5, minLineLength=15, maxLineGap=20)
+    if lines is None or len(lines) == 0:
+        return lines
+    for line in lines:
+        for x1, y1, x2, y2 in line:
+            # cv2.line(line_image,(x1,y1),(x2,y2),(255,0,0),5)
+            plt.plot([x1, x2], [y1, y2])
+    plt.show()
+    return lines
+
