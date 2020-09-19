@@ -1,1 +1,6 @@
 opencv-python==4.2.0.34
+flask==1.1.2
+celery==4.4.7
+redis==3.5.3
+matplotlib==3.3.2
+

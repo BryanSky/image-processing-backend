@@ -56,3 +56,4 @@ ENV/
 staticfiles/
 
 cc-test-reporter
+node_modules_old/

@@ -2,7 +2,6 @@ import cv2
 import numpy as np
 import random
 import matplotlib.pyplot as plt
-from sklearn.cluster import AgglomerativeClustering
 
 
 def extract_lines(img, objects, kernel_size=5):
@@ -61,38 +60,6 @@ def cluster_lines(lines, threshold=20):
                 cluster = [p1, p2]
                 clusters[len(clusters)] = cluster
     return clusters
-
-
-def apply_agglomerative_clustering(lines):
-    points = []
-    for line in lines:
-        for x1, y1, x2, y2 in line:
-            points.append([x1, y1])
-            points.append([x2, y2])
-    # dendrogram = sch.dendrogram(sch.linkage(points, method='ward'))
-    hc = AgglomerativeClustering(n_clusters=13, affinity='euclidean', linkage='ward')
-    y_hc = hc.fit_predict(points)
-    y_hc = np.array(y_hc)
-    points = np.array(points)
-    plt.show()
-    print(y_hc)
-    plt.scatter(points[y_hc == 0, 0], points[y_hc == 0, 1], s=100, c=(random_color()/255))
-    plt.scatter(points[y_hc == 1, 0], points[y_hc == 1, 1], s=100, c=(random_color()/255))
-    plt.scatter(points[y_hc == 2, 0], points[y_hc == 2, 1], s=100, c=(random_color()/255))
-    plt.scatter(points[y_hc == 3, 0], points[y_hc == 3, 1], s=100, c=(random_color()/255))
-
-    plt.scatter(points[y_hc == 4, 0], points[y_hc == 4, 1], s=100, c=(random_color()/255))
-    plt.scatter(points[y_hc == 5, 0], points[y_hc == 5, 1], s=100, c=(random_color()/255))
-    plt.scatter(points[y_hc == 6, 0], points[y_hc == 6, 1], s=100, c=(random_color()/255))
-    plt.scatter(points[y_hc == 7, 0], points[y_hc == 7, 1], s=100, c=(random_color()/255))
-
-    plt.scatter(points[y_hc == 8, 0], points[y_hc == 8, 1], s=100, c=(random_color()/255))
-    plt.scatter(points[y_hc == 9, 0], points[y_hc == 9, 1], s=100, c=(random_color()/255))
-    plt.scatter(points[y_hc == 10, 0], points[y_hc == 10, 1], s=100, c=(random_color()/255))
-    plt.scatter(points[y_hc == 11, 0], points[y_hc == 11, 1], s=100, c=(random_color()/255))
-
-    plt.scatter(points[y_hc == 12, 0], points[y_hc == 12, 1], s=100, c=(random_color()/255))
-    plt.show()
 
 
 def random_color():

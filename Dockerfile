@@ -1,29 +1,17 @@
-FROM node:alpine
-LABEL maintainer="Benedict Lindner" \
-      contact="benedictlindner@outlook.com"
-RUN apk update && apk upgrade
+FROM ubuntu:20.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+ADD scripts/install_requirements.sh scripts/requirements.txt /setup/
+
+RUN apt-get update -y \
+    && apt-get install -y libglib2.0-0 libsm6 libxrender1 libxext6 python3-pip \
+    && /bin/bash /setup/install_requirements.sh \
+    && mkdir -p /app/data
+
+COPY ./ /app/
 
 WORKDIR /app
 
-# Install python, pip and python packages
-RUN apk add python3 curl
-COPY requirements.txt requirements.txt
-RUN curl https://bootstrap.pypa.io/get-pip.py | python3 \
-  && rm -rf /var/cache/apk/* \
-  && pip3 install --upgrade pip \
-  && pip3 install -r requirements.txt
+ENTRYPOINT ["python3", "main.py"]
 
-# Install node modules
-COPY package.json package.json
-RUN npm set progress=false && npm install -s --no-progress -v
-COPY . .
-RUN sh build.sh
-
-ENV DEBUG=False
-
-# EXPOSE port to be used
-ENV PORT=8000
-EXPOSE 8000
-
-# Set command to run as soon as container is up
-CMD python3 manage.py runserver 0.0.0.0:$PORT
