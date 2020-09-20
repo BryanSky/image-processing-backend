@@ -2,17 +2,17 @@ import numpy as np
 import cv2
 
 templates = [
-    ('symbols_cutted/Cns.png', 0.7),
-    ('symbols_cutted/Gen.png', 0.9),
-    ('symbols_cutted/Mxv-1.png', 0.9),
-    ('symbols_cutted/Mxv-2.png', 0.9),
-    ('symbols_cutted/Hyds.png', 0.9),
-    ('symbols_cutted/HExg-1.png', 0.85),
-    ('symbols_cutted/Stk.png', 0.85),
-    ('symbols_cutted/Pu.png', 0.9),
-    ('symbols_cutted/Pu_flipped.png', 0.9),
-    ('symbols_cutted/TSen.png', 0.8),
-    ('symbols_cutted/VflSen.png', 0.9)
+    ('app/symbols_cutted/Cns.png', 0.7),
+    ('app/symbols_cutted/Gen.png', 0.9),
+    ('app/symbols_cutted/Mxv-1.png', 0.9),
+    ('app/symbols_cutted/Mxv-2.png', 0.9),
+    ('app/symbols_cutted/Hyds.png', 0.9),
+    ('app/symbols_cutted/HExg-1.png', 0.85),
+    ('app/symbols_cutted/Stk.png', 0.85),
+    ('app/symbols_cutted/Pu.png', 0.9),
+    ('app/symbols_cutted/Pu_flipped.png', 0.9),
+    ('app/symbols_cutted/TSen.png', 0.8),
+    ('app/symbols_cutted/VflSen.png', 0.9)
 ]
 
 
@@ -86,7 +86,9 @@ def extract_bounding_boxes(img_gray, img_rgb_detection):
                    ] + 20 * [(127, 0, 255)])
     for template_path, threshold in templates:
         color = next(colors)
+        print("template_path: {}".format(template_path))
         img_template = cv2.imread(template_path, 0)
+        print(img_template)
         # loop over the scales of the template image
 
         loc = [[], []]
@@ -123,10 +125,13 @@ def extract_bounding_boxes(img_gray, img_rgb_detection):
             for pt in zip(*loc[::-1]):
                 w, h = next(width_it), next(height_it)
                 cv2.rectangle(img_rgb_detection, pt1=pt, pt2=(pt[0] + w, pt[1] + h), color=color, thickness=2)
-                pt1_x, pt1_y = pt1_x
+                pt1_x, pt1_y = pt
                 pt2_x = pt[0] + w
                 pt2_y = pt[1] + h
-                symbols.append([min(pt1_x, pt2_x), min(pt1_y, pt2_y), max(pt1_x, pt2_x), max(pt1_y, pt2_y)])
+                symbols.append({
+                    'label': template_path,
+                    'box': [min(pt1_x, pt2_x), min(pt1_y, pt2_y), max(pt1_x, pt2_x), max(pt1_y, pt2_y)]
+                })
                 print(template_path, len(score_reduced))
     # cv2.imshow('Image with detections', img_rgb_detection)
     # cv2.waitKey(0)

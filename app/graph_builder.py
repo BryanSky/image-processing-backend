@@ -48,31 +48,43 @@ class Graph(object):
                 elif line.end is None:
                     line.end = node.id
                 else:
-                    raise("Line should not have three endings")
+                    print("WARN: line already has two endings with {} and {} snf would be assigned to {} too"
+                          .format(line.start, line.end, node.id))
+        self.lines.append(line)
 
     def build_from_data(self, items, lines):
         for item in items:
             node = Node(self.node_counter, item['label'])
+            node.bounding_box = item['box']
             self.node_counter += 1
             self.add_node(node)
         for line in lines:
             edge = Edge(self.edge_counter)
-            x1, y1, x2, y2 = line
-            edge.set_points([x1, y1], [x2, y2])
-            self.edge_counter += 1
-            self.add_line(edge)
+            for x1, y1, x2, y2 in line:
+                edge.set_points([x1, y1], [x2, y2])
+                self.edge_counter += 1
+                self.add_line(edge)
 
     def to_json(self):
         data = {
-            'nodes': self.nodes,
-            'edges': self.lines
+            'nodes': [],
+            'edges': []
         }
+        for node in self.nodes:
+            data['nodes'].append(node.build_data_object())
+        for line in self.lines:
+            data['edges'].append(line.build_data_object())
         return data
+
+static_type_map = {
+
+}
 
 
 class Node(object):
 
-    def __init__(self, type, id, matching_threshold=10):
+    def __init__(self, id, type, matching_threshold=10):
+        type = (type.split('/')[-1]).split('.')[0]
         self.id = id
         self.type = type
         self.bounding_box = []
@@ -105,7 +117,8 @@ class Node(object):
         thresholded_bounding_box = [x_min - self.matching_threshold, y_min - self.matching_threshold,
                                     x_max + self.matching_threshold, y_max + self.matching_threshold]
         x_min, y_min, x_max, y_max = thresholded_bounding_box
-        x1, y1, x2, y2 = line
+        x1, y1 = line.start
+        x2, y2 = line.end
         return (x_min <= x1 <= x_max and y_min <= y1 <= y_max) or (x_min <= x2 <= x_max and y_min <= y2 <= y_max)
 
 
