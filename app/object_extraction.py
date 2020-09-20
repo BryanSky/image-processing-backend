@@ -3,16 +3,19 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
+from app.symbol_detection import load_image, extract_bounding_boxes
 
-def extract_object_with_position(img):
+
+def extract_object_with_position(img_path):
     """
     detect and label all objects present in the image
     :param img: 3-channel rgb image
     :return: a list of detected objects; each object should be a seperate class or just a json-Object containing at
     at least the position in the image as well as the label (= class the object belongs to)
     """
-    # TODO: implement
-    return
+    img_gray, img_rgb_detection = load_image(img_path)
+    symbols = extract_bounding_boxes(img_gray, img_rgb_detection)
+    return symbols
 
 
 def load_templates():
