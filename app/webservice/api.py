@@ -5,6 +5,7 @@ import cv2 as cv
 import json
 import uuid
 import sys
+import time
 
 from app.graph_builder import build_graph
 
@@ -17,7 +18,8 @@ def welcome():
 
 
 def evaluate_image(img):
-    build_graph(img)
+    print(img)
+    return build_graph(img)
 
 
 @blueprint.route('/upload', methods=['POST'])
@@ -30,10 +32,14 @@ def upload_image():
             print(image)
             image.save("app/data/" + str(generated_id) + ".png")
             print("OK")
-            thread = Thread(target=evaluate_image, args=(generated_id, ))
+            # thread = Thread(target=evaluate_image, args=("app/data/" + str(generated_id) + ".png", ))
             print("OK 1/2")
-            thread.start()
+            # thread.start()
             print("OK 1")
+            try:
+                return evaluate_image("app/data/" + str(generated_id) + ".png")
+            except:
+                print("Something went wrong")
             return jsonify(str(generated_id))
 
 

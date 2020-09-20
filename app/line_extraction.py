@@ -56,13 +56,13 @@ def apply_hough_trafo(img):
     blur_gray = cv2.GaussianBlur(gray_img, (kernel_size, kernel_size), 0)
     edges = cv2.Canny(blur_gray, 50, 150)
 
-    line_image = np.copy(img) * 0
+    # line_image = np.copy(img) * 0
     lines = cv2.HoughLinesP(edges, rho=1, theta=np.pi / 180, threshold=5, minLineLength=25, maxLineGap=30)
-    for line in lines:
-        for x1, y1, x2, y2 in line:
-            # cv2.line(line_image,(x1,y1),(x2,y2),(255,0,0),5)
-            plt.plot([x1, x2], [y1, y2])
-    plt.show()
+    # for line in lines:
+    #     for x1, y1, x2, y2 in line:
+    #         # cv2.line(line_image,(x1,y1),(x2,y2),(255,0,0),5)
+    #         plt.plot([x1, x2], [y1, y2])
+    # plt.show()
     return lines
 
 

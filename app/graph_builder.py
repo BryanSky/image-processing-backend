@@ -16,7 +16,7 @@ def build_graph(image_path):
     filename = image_path.replace('.png', '.json')
     with open(filename, 'w') as f:
         json.dump(json_string, f)
-    return
+    return json_string
 
 
 def visualize_graph(graph):

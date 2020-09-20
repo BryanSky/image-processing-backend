@@ -97,7 +97,7 @@ def extract_bounding_boxes(img_gray, img_rgb_detection):
 
         for scale in np.linspace(0.3, 0.8, 10)[::-1]:
 
-            tmp_resized = cv2.resize(img_template, dsize=(round(img_template.shape[1]*scale), round(img_template.shape[0]*scale)),
+            tmp_resized = cv2.resize(img_template, dsize=(int(img_template.shape[1]*scale), int(img_template.shape[0]*scale)),
                                      interpolation=cv2.INTER_AREA)
 
             w, h = tmp_resized.shape[::-1]
