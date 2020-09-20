@@ -6,25 +6,11 @@
 
 ``` bash
 # install dependencies
-npm install
+python3 -m pip install -r Scripts\requirements.txt
 
-# serve with hot reload at localhost:8080
-npm run dev
+# serve with hot reload at localhost:5000
+python3 main.py
 
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
-
-# run unit tests
-npm run unit
-
-# run all tests
-npm test
-
-# run server
-.server.sh
+# Front end is in different repository
 ```
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
